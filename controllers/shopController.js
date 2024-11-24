@@ -165,26 +165,34 @@ const deleteComment = async (req, res) => {
     try {
         const { productId, commentId } = req.params;
 
+       
         const shopCard = await ShopCard.findById(productId);
         if (!shopCard) {
             return res.status(404).json({ message: "Shop card not found" });
         }
 
+   
         const commentIndex = shopCard.comments.findIndex(comment => comment._id.toString() === commentId);
 
+       
         if (commentIndex === -1) {
             return res.status(404).json({ message: "Comment not found" });
         }
 
+    
         shopCard.comments.splice(commentIndex, 1);
+
+     
         await shopCard.save();
 
+     
         res.status(200).json({ message: "Comment deleted successfully" });
     } catch (error) {
-        console.error(error);
+        console.error("Failed to delete comment", error);
         res.status(500).json({ message: error.message });
     }
 };
+
 
 module.exports = {
     createShopCard,
